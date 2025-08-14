@@ -2,7 +2,7 @@ import React from 'react';
 import mongoose from 'mongoose';
 
 export const dbConnect = async ()=>{
-  if (process.env.MongoDB_URI){
+  if (process.env.MONGODB_URI){
     const mongoose = require('mongoose')
   }
 try{
