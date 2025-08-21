@@ -1,43 +1,67 @@
-import {NextResponse} from 'next/server';
-import bcrypt from 'bcrypt';
-import { dbConnect } from '@/lib/db'; 
-import User from '@/models/userModel/user'
+import { NextRequest , NextResponse } from "next/server";
+import { dbConnect } from "@/lib/db";
+import User from "@/models/userModel/user";
+// import bcrypt from "bcrypt";
+// import { signJWT, setAuthCookie } from "@/lib/auth";
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest){
   try {
-    // Connect to the database
-    await dbConnect();
+    const {name , email , password }  = await req.json();
 
-    // Parse the request body
-    const { name, email, password } = await request.json();
-
-    // Validate input
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
+    if(!name || !email || !password){
+      return NextResponse.json(
+        {err: "Name , Email and Password are required"},
+        {status:400}
+      )
     }
+  await dbConnect();  
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return NextResponse.json({ error: 'User already exists' }, { status: 409 });
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new user
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    // Save user to the database
-    await newUser.save();
-
-    return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
-  } catch (error) {
-    console.error('Signup Error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  const existingUser = await User.findOne({ email});
+  if (existingUser){
+    return NextResponse.json(
+      {err: "User already exists"},
+      {status:400}
+    )
   }
+
+  const user = await User.create({
+    name,
+    email,
+    password
+  })
+
+  return NextResponse.json(
+    {message: "User created successfully",
+       user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+    },
+    
+    {status:201 }
+  )
+
+  } catch (error) {
+    return NextResponse.json(
+      {err: "Internal Server Error"},
+      {status:500}
+    )
+  }
+
+
 }
+
+/*
+  await dbConnect();
+  const { name, email, password } = await req.json();
+  const exists = await User.findOne({ email });
+  if (exists) return NextResponse.json({ error:"Email exists" },{ status:409 });
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = await User.create({ name, email, passwordHash });
+  const token = signJWT({ id: user._id.toString() });
+  setAuthCookie(token);
+  return NextResponse.json({ id:user._id, name:user.name, email:user.email }, { status:201 });
+
+
+*/

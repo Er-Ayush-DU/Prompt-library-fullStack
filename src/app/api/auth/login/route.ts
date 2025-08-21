@@ -1,42 +1,62 @@
-import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
 import User from "@/models/userModel/user";
+import bcrypt from "bcryptjs";
+// import { signJWT, setAuthCookie } from "@/lib/auth"; // (agar JWT / cookie chahiye to uncomment)
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
+
+    // validate
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and Password are required" },
+        { status: 400 }
+      );
+    }
+
+    // connect to db
     await dbConnect();
 
+    // check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      );
     }
 
+    // compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid password" },
+        { status: 402 }
+      );
     }
 
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET!,
-      { expiresIn: "7d" }
+    // (Optional: JWT / Cookie)
+    // const token = signJWT({ id: user._id.toString() });
+    // setAuthCookie(token);
+
+    return NextResponse.json(
+      {
+        message: "Login successful",
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+      },
+      { status: 200 }
     );
-
-    const res = NextResponse.json({ message: "Login successful" });
-    res.cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60,
-      path: "/"
-    });
-
-    return res;
-  } catch (err) {
-    console.error("Login Error:", err);
-    return NextResponse.json({ error: "Login failed" }, { status: 500 });
+  } catch (error) {
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

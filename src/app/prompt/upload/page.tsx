@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function UploadPromptPage() {
+  const router = useRouter();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -12,16 +14,16 @@ export default function UploadPromptPage() {
   });
   const [file, setFile] = useState<File | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target as any;
-    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+  const handleChange = (e: any) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return alert("Please select a file");
 
-    // Step 1: Get S3 Upload URL
+    // 1) Get S3 Upload URL
     const uploadRes = await fetch("/api/prompts/upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -29,12 +31,12 @@ export default function UploadPromptPage() {
     });
     const { uploadUrl, s3Key } = await uploadRes.json();
 
-    // Step 2: Upload file to S3
+    // 2) Upload file to S3
     await fetch(uploadUrl, { method: "PUT", body: file });
 
-    const previewUrl = `https://${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${s3Key}`;
+    const previewUrl = `https://${process.env.NEXT_PUBLIC_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${s3Key}`;
 
-    // Step 3: Create Prompt
+    // 3) Save Prompt in DB
     await fetch("/api/prompts/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,6 +50,7 @@ export default function UploadPromptPage() {
     });
 
     alert("Prompt uploaded successfully!");
+    router.push("/prompts");
   };
 
   return (

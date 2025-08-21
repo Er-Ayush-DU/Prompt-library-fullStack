@@ -1,10 +1,9 @@
-// models/Prompt.ts
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPrompt extends Document {
   title: string;
   description: string;
-  category: 
+  category:
     | "image"
     | "video_noaudio"
     | "video_audio"
@@ -45,9 +44,9 @@ const PromptSchema: Schema = new Schema<IPrompt>(
       ],
     },
     contentType: { type: String, required: true }, // MIME type
-    tags: [{ type: String, index: true }],
+    tags: { type: [String], default: [] },
     price: { type: Number, default: 0, min: 0 },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     s3Key: { type: String, required: true, unique: true },
     previewUrl: { type: String, required: true },
     likesCount: { type: Number, default: 0, min: 0 },
@@ -57,7 +56,7 @@ const PromptSchema: Schema = new Schema<IPrompt>(
   { timestamps: true }
 );
 
-// Indexes for optimization
+// ✅ Indexes for optimization (keep only schema-level indexes)
 PromptSchema.index({ createdBy: 1 });
 PromptSchema.index({ tags: 1 });
 

@@ -1,7 +1,16 @@
-import Image from "next/image";
+import { ReactNode } from "react";
+import Navbar from "@/components/Navbar";
 
-export default function Home() {
+interface HomeProps {
+  children: ReactNode;
+}
+
+export default function HomeLayout({ children }: HomeProps) {
   return (
-    <div>Prompt Library </div>
+    <div className="min-h-screen flex flex-col">
+    
+      {/* Children control everything below navbar */}
+      <main className="flex-1">{children}</main>
+    </div>
   );
 }

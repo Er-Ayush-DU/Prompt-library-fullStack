@@ -1,27 +1,39 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyToken } from "@/lib/auth";
-import { getUploadUrl } from "@/lib/s3";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import crypto from "crypto";
+
+const s3 = new S3Client({
+  region: process.env.S3_REGION!,
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY!,
+    secretAccessKey: process.env.S3_SECRET_KEY!,
+  },
+});
 
 export async function POST(req: Request) {
   try {
-    const token = (await cookies()).get("token")?.value;
-    const decoded = verifyToken(token!);
-    if (!decoded || typeof decoded === "string" || !("userId" in decoded)) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { fileName, contentType } = await req.json();
     if (!fileName || !contentType) {
-      return NextResponse.json({ error: "Missing file data" }, { status: 400 });
+      return NextResponse.json({ error: "Missing fileName or contentType" }, { status: 400 });
     }
 
-    const s3Key = `${decoded.userId}/${Date.now()}-${fileName}`;
-    const uploadUrl = await getUploadUrl(s3Key, contentType);
+    // Unique key in S3
+    const fileKey = `prompts/${crypto.randomUUID()}-${fileName}`;
 
-    return NextResponse.json({ uploadUrl, s3Key });
-  } catch (err) {
-    console.error("Upload Error:", err);
+    // Create command for S3
+    const command = new PutObjectCommand({
+      Bucket: process.env.S3_BUCKET!,
+      Key: fileKey,
+      ContentType: contentType,
+    });
+
+    // Generate signed URL (valid for 60 seconds)
+    const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
+
+    return NextResponse.json({ uploadUrl, s3Key: fileKey });
+  } catch (error) {
+    console.error("Error generating S3 upload URL:", error);
     return NextResponse.json({ error: "Failed to generate upload URL" }, { status: 500 });
   }
 }
