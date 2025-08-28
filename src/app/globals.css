@@ -5,6 +5,24 @@
   --foreground: #171717;
 }
 
+html,
+body {
+  height: 100%;
+  -ms-overflow-style: none;
+  /* IE/old Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

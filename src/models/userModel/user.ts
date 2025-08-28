@@ -5,6 +5,8 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  resetToken?: string;
+  resetTokenExpiry?: number;
   avatarUrl?: string;
   bio?: string;
 }
@@ -13,11 +15,13 @@ const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  resetToken: { type: String },
+  resetTokenExpiry: { type: Number },
   avatarUrl: { type: String },
   bio: { type: String, maxlength: 200 }
 }, { timestamps: true });
 
-UserSchema.pre("save", async function (next){
+UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     // Hash the password here if needed
     this.password = await bcrypt.hash(this.password, 10);
