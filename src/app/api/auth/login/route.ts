@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { dbConnect } from "@/lib/db"; // Path check karo, agar alag hai to adjust karo
-import User from "@/models/userModel/user"; // Path check karo
+import { dbConnect } from "@/lib/db";
+import User from "@/models/userModel/user";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
 
     await dbConnect();
 
-    // Handle login action
     if (action === "login") {
       if (!email || !password) {
         return NextResponse.json(
@@ -42,7 +41,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Handle reset action
     if (action === "reset") {
       if (!email) {
         return NextResponse.json({ error: "Email is required" }, { status: 400 });
@@ -62,6 +60,7 @@ export async function POST(req: NextRequest) {
       user.resetToken = resetToken;
       user.resetTokenExpiry = resetTokenExpiry;
       await user.save();
+      console.log("Token saved for:", user.email, "Token:", resetToken); // Debug
 
       const transporter = nodemailer.createTransport({
         service: "gmail",

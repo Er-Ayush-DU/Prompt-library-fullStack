@@ -14,6 +14,7 @@ export default function ResetPassword() {
   const token = searchParams.get("token");
 
   useEffect(() => {
+    console.log("Token:", token);
     if (!token) {
       setError("Invalid or missing reset token");
     }
