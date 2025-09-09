@@ -2,30 +2,34 @@ import { Schema, model, models } from "mongoose";
 
 const CommentSchema = new Schema(
   {
-    promptId: { 
-      type: Schema.Types.ObjectId, 
-      ref: "Prompt", 
-      required: true, 
-      index: true 
+    promptId: {
+      type: Schema.Types.ObjectId,
+      ref: "Prompt",
+      required: true,
+      index: true
     },
-    userId: { 
-      type: Schema.Types.ObjectId, 
-      ref: "User", 
-      required: true 
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true
     },
-    comment: { 
-      type: String, 
-      required: true, 
-      trim: true, 
-      maxlength: 1000 
+    userName: {
+      type: String,
+      required: true
     },
-    createdAt: { 
-      type: Date, 
-      default: Date.now, 
-      immutable: true 
+    comment: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 1000
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      immutable: true
     },
   },
-  {                                                }
+  {}
 );
 
 // Index optimization (prompt + user)

@@ -1,39 +1,9 @@
-// import jwt from "jsonwebtoken";
-// import { cookies } from "next/headers";
-
-// const COOKIE = "pl_token"; // cookie ka naam tumhare project ke hisaab se
-
-// export function signJWT(payload: object) {
-//   const secret = process.env.JWT_SECRET;
-//   const expiresIn = process.env.JWT_EXPIRES || "7d";
-
-//   if (!secret) {
-//     throw new Error("JWT_SECRET is not defined in the environment variables.");
-//   }
-
-//   return jwt.sign(payload, secret as jwt.Secret, { expiresIn } as jwt.SignOptions);
-// }
-
-// export async function getUserFromCookies(): Promise<{ id: string; } | null> {
-//   const token = (await cookies()).get(COOKIE)?.value;
-//   if (!token) return null;
-//   try {
-//     return jwt.verify(token, process.env.JWT_SECRET!) as any;
-//   } catch {
-//     return null;
-//   }
-// }
-
-// export async function clearAuthCookie() {
-//   (await cookies()).set(COOKIE, "", { httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 0 });
-// }
-
 import { NextAuthOptions } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import { dbConnect } from "./db";
 import User from "@/models/userModel/user";
-import { email } from "zod";
 import bcrypt from "bcryptjs";
+import { getServerSession } from "next-auth/next";
 
 export const authOption: NextAuthOptions = {
   providers: [
@@ -76,29 +46,48 @@ export const authOption: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        token.id = (user as any).id || token.sub; // MongoDB _id ko token mein set karna
       }
+      console.log("JWT callback token:", token);
       return token;
     },
     async session({ session, token }) {
-        if (session.user) {
-          session.user.id = token.id as string;
-        }
-        return session;
+      if (session.user) {
+        (session.user as any).id = (token as any).id || token.sub;
+        (session.user as any).avatarUrl = (token as any).avatarUrl || null;
+        (session.user as any).bio = (token as any).bio || null;
+        console.log("Session callback session:", session);
       }
+      return session;
+    }
 
-    },
+  },
 
-    pages:{
-      signIn: "/login",
-      error: "/login"
-    },
+  pages: {
+    signIn: "/login",
+    error: "/login"
+  },
 
-    session: {
-      strategy: "jwt",
-      maxAge: 30 * 24 * 60 * 60, // 30 days
-    },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
 
-    secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 
-  }
+}
+
+
+// ✅ Helper function for API routes
+export async function getUserFromCookies() {
+  const session = await getServerSession(authOption);
+  if (!session?.user) return null;
+
+  return {
+    id: session.user.id,
+    name: session.user.name,
+    email: session.user.email,
+    avatarUrl: session.user.avatarUrl,
+    bio: session.user.bio,
+  };
+}

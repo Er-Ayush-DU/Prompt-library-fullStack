@@ -1,34 +1,43 @@
-import { Metadata } from 'next';
-import { redirect } from 'next/navigation'; // Not needed here, but for protected
-import PromptCard from '@/components/promptCard/page';
+"use client";
 
-export const metadata: Metadata = {
-  title: 'PromptLibrary - Home',
-  description: 'Browse AI-generated prompts',
-  openGraph: {
-    title: 'PromptLibrary',
-    description: 'Marketplace for AI prompts',
-    images: '/og-image.png', // Add your OG image
-  },
-};
+import { useEffect, useState } from "react";
+import PromptCard from "@/components/PromptCard";
+import { useSession } from "next-auth/react";
 
-async function getPrompts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/prompts`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('Failed to fetch prompts');
-  return res.json();
-}
+export default function Home() {
+  const { data: session } = useSession();
+  const [prompts, setPrompts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function Home() {
-  const prompts = await getPrompts();
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      try {
+        const res = await fetch("/api/prompts");
+        const data = await res.json();
+        setPrompts(data.prompts || []);
+      } catch (error) {
+        console.error("Error fetching prompts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPrompts();
+  }, []);
+
+  if (loading) return <p className="container mx-auto p-4">Loading...</p>;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Home Feed</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {prompts.map((prompt: any) => (
-          <PromptCard key={prompt._id} prompt={prompt} />
-        ))}
-      </div>
+      <h2 className="text-2xl font-bold mb-4">All Prompts</h2>
+      {prompts.length === 0 ? (
+        <p>No prompts available.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {prompts.map((prompt) => (
+            <PromptCard key={prompt._id} prompt={prompt} session={session} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

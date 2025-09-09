@@ -7,14 +7,14 @@ import { Bell, ShoppingCart, MessageSquare, Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export default function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false); // profile menu
   const [catOpen, setCatOpen] = useState(false);   // categories menu
   const menuRef = useRef<HTMLDivElement>(null);
   const catRef = useRef<HTMLDivElement>(null);
 
-  // 🔹 Close profile menu when clicking outside
+  // 🔹 Close menus when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -29,6 +29,16 @@ export default function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // 🔹 Handle Sell button click with authentication check
+  const handleSell = () => {
+    if (status === "authenticated") {
+      router.push("/upload?mode=sell");
+    } else {
+      alert("Please sign in to sell prompts");
+      router.push("/login");
+    }
+  };
 
   return (
     <header className="bg-[#1d1c2b] text-white px-6 py-3 flex items-center justify-between shadow">
@@ -64,6 +74,7 @@ export default function Navbar() {
                 key={category}
                 href={`/category/${category.toLowerCase()}`}
                 className="block px-4 py-2 hover:bg-pink-500"
+                onClick={() => setCatOpen(false)} // Close on click
               >
                 {category}
               </Link>
@@ -86,9 +97,15 @@ export default function Navbar() {
 
       {/* Right: Links + Icons */}
       <nav className="flex items-center gap-5 relative">
-        <Link href="/jobs" className="hover:text-pink-400">Jobs</Link>
-        <Link href="/create" className="hover:text-pink-400">Create</Link>
-        <Link href="/sell" className="hover:text-pink-400">Sell</Link>
+        <Link href="/jobs" className="hover:text-pink-400">
+          Jobs
+        </Link>
+        <button
+          onClick={handleSell}
+          className="hover:text-pink-400"
+        >
+          Sell
+        </button>
 
         <MessageSquare className="hover:text-pink-400 cursor-pointer" />
         <Bell className="hover:text-pink-400 cursor-pointer" />
@@ -106,12 +123,14 @@ export default function Navbar() {
             >
               Login
             </button>
-            <button
+
+            {/* <button
               onClick={() => router.push("/signup")}
               className="px-3 py-1 rounded border border-pink-400 hover:bg-pink-600"
             >
               Sign Up
-            </button>
+            </button> */}
+            
           </div>
         ) : (
           <div className="relative" ref={menuRef}>
@@ -129,24 +148,28 @@ export default function Navbar() {
                 <Link
                   href="/profile"
                   className="block px-4 py-2 hover:bg-pink-500 rounded-t-lg"
+                  onClick={() => setMenuOpen(false)}
                 >
                   Profile
                 </Link>
                 <Link
                   href="/settings"
                   className="block px-4 py-2 hover:bg-pink-500"
+                  onClick={() => setMenuOpen(false)}
                 >
                   Settings
                 </Link>
                 <Link
                   href="/dashboard"
                   className="block px-4 py-2 hover:bg-pink-500"
+                  onClick={() => setMenuOpen(false)}
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/"
                   className="block px-4 py-2 hover:bg-pink-500"
+                  onClick={() => setMenuOpen(false)}
                 >
                   Home
                 </Link>

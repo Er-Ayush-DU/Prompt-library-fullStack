@@ -1,9 +1,10 @@
 import React from 'react'
+import Upload from '../upload/page'
 
 const page = () => {
   return (
     <div>
-      create kariye nahhhahh !!
+      <Upload />
     </div>
   )
 }

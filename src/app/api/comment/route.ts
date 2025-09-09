@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
-import Comment from "@/models/commentsModel/comments";
+import Prompt from "@/models/promptModel/prompt";
 
 export async function POST(req: NextRequest) {
-  await dbConnect();
-  const { postId, userId, content } = await req.json();
-
-  if (!postId || !userId || !content) {
-    return NextResponse.json({ error: "postId, userId, and content are required" }, { status: 400 });
+  try {
+    await dbConnect();
+    const { promptId, userId } = await req.json();
+    const prompt = await Prompt.findById(promptId);
+    if (prompt) prompt.likesCount += 1;
+    await prompt?.save();
+    return NextResponse.json({ message: "Liked" }, { status: 200 });
+  } catch (error) {
+    console.error("Like API error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-
-  const comment = new Comment({ postId, userId, content });
-  await comment.save();
-  return NextResponse.json({ message: "Comment added" }, { status: 201 });
 }

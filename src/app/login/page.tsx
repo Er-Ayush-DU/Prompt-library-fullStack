@@ -58,6 +58,16 @@ export default function LoginPage() {
               Forgot Password?
             </a>
           </div>
+
+            <div className="text-center mt-2">
+            <a
+              href="/signup"
+              className="text-white"
+            >
+              Have you account? <span className="text-blue-600">Register</span>
+            </a>
+          </div>
+
         </form>
       </div>
     </div>

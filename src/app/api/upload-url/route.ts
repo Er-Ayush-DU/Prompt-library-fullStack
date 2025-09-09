@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import crypto from "crypto";
-import { authOption } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION!,
@@ -15,42 +12,25 @@ const s3 = new S3Client({
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOption);
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    const userId = session.user.id; // ✅ yahi tumhara userId hai
-    console.log("Logged in userId:", userId);
-
     const { fileName, contentType } = await req.json();
+
     if (!fileName || !contentType) {
       return NextResponse.json({ error: "Missing fileName or contentType" }, { status: 400 });
     }
 
-    // Unique key in S3
-    const fileKey = `prompts/${crypto.randomUUID()}-${fileName}`;
+    const s3Key = `uploads/${Date.now()}-${fileName}`;
 
-    // Create command for S3
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME!,
-      Key: fileKey,
+      Key: s3Key,
       ContentType: contentType,
     });
 
-    // Generate signed URL (valid for 60 seconds)
-    const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
+    const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
 
-    return NextResponse.json({
-      uploadUrl,
-      s3Key: fileKey,
-      userId: session.user.id,
-    });
+    return NextResponse.json({ uploadUrl, s3Key });
   } catch (error) {
-    console.error("Error generating S3 upload URL:", error);
+    console.error("Upload URL error:", error);
     return NextResponse.json({ error: "Failed to generate upload URL" }, { status: 500 });
   }
 }
-
-
-

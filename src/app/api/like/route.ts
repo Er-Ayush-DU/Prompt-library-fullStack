@@ -1,22 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
-import Like from "@/models/likeModel/likes";
+import Prompt from "@/models/promptModel/prompt";
 
 export async function POST(req: NextRequest) {
-  await dbConnect();
-  const { postId, userId } = await req.json();
-
-  if (!postId || !userId) {
-    return NextResponse.json({ error: "postId and userId are required" }, { status: 400 });
+  try {
+    await dbConnect();
+    const { promptId, userId } = await req.json();
+    const prompt = await Prompt.findById(promptId);
+    if (prompt) prompt.likesCount += 1;
+    await prompt?.save();
+    return NextResponse.json({ message: "Liked" }, { status: 200 });
+  } catch (error) {
+    console.error("Like API error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-
-  const existingLike = await Like.findOne({ postId, userId });
-  if (existingLike) {
-    await Like.deleteOne({ _id: existingLike._id });
-    return NextResponse.json({ message: "Like removed" }, { status: 200 });
-  }
-
-  const like = new Like({ postId, userId });
-  await like.save();
-  return NextResponse.json({ message: "Like added" }, { status: 201 });
 }
