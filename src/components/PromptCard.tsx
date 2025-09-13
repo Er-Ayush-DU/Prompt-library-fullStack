@@ -14,6 +14,8 @@ export default function PromptCard({ prompt, session }: PromptCardProps) {
   const [isLiking, setIsLiking] = useState(false);
   const { status } = useSession();
 
+  console.log("PromptCard session:", session);
+
   const handleLike = async () => {
     if (status !== "authenticated" || isLiking) return;
     setIsLiking(true);

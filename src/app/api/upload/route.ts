@@ -33,11 +33,12 @@ export async function POST(req: NextRequest) {
       createdBy: userId,
       s3Key,
       contentType,
-      previewUrl: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${s3Key}`,
+      previewUrl: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.eu-north-1.amazonaws.com/${s3Key}`,
       likesCount: 0,
       commentsCount: 0,
       isForSale: price > 0,
     });
+    // console.log("Saving prompt:", prompt);                          
 
     await prompt.save();
 

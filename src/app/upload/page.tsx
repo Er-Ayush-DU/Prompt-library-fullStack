@@ -90,14 +90,14 @@ export default function Upload() {
       <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full p-2 border rounded" />
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" className="w-full p-2 border rounded h-32" />
-        <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2 border rounded bg-black">
+        <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2 border rounded bg-black">  
           <option value="">Select Category</option>
           <option value="image">Image</option>
           <option value="video_noaudio">Video</option>
           <option value="audio">Audio</option>
           <option value="clips">Clips</option>
           <option value="games">Games</option>
-          <option value="webapps">Web apps</option>
+          <option value="webapps">Web apps</option>                                     
           <option value="ui_design">UI design</option>
           <option value="other">Other</option>
         </select>

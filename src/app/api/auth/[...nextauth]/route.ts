@@ -14,17 +14,23 @@ export const authOptions = {
       },
       async authorize(credentials) {
         await dbConnect();
+        console.log("🔥 Incoming credentials:", credentials);
         const user = await User.findOne({ email: credentials?.email });
-        if (!user) return null;
+        if (!user) {
+          console.log("❌ User not found");
+          return null;
+        }
         const isMatch = await bcrypt.compare(credentials?.password || "", user.password);
+        console.log("🔑 Password match:", isMatch);
         if (isMatch) {
           return { id: user._id.toString(), name: user.name, email: user.email };
         }
+        console.log("❌ Invalid password"); 
         return null;
       },
     }),
   ],
-  session: { strategy: "jwt" as const},
+  session: { strategy: "jwt" as const },
   pages: {
     signIn: "/login",
   },

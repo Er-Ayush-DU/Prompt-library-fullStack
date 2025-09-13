@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+  
+    user.password = newPassword;
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
 
@@ -60,3 +60,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+    

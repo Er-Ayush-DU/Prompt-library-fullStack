@@ -23,12 +23,11 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    const hashedPassword = await bcrypt.hash(password, 12);
+  
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
     });
 
     return NextResponse.json(

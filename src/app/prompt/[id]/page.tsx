@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const prompt = await getPrompt(params.id); // Reuse fetch function
+  const { id } = await params; // ✅ await
+  const prompt = await getPrompt(id);
+  // console.log("Prompt for metadata:", prompt.previewUrl);
   return {
     title: prompt?.title || 'Prompt Detail',
     description: prompt?.description.slice(0, 160),
@@ -22,8 +24,8 @@ async function getPrompt(id: string) {
 }
 
 export default async function PromptDetail({ params }: Props) {
-  const prompt = await getPrompt(params.id);
-  if (!prompt) return <div>Prompt not found</div>;
+  const { id } = await params; // ✅ await
+  const prompt = await getPrompt(id);
 
   return (
     <div className="container mx-auto p-4">

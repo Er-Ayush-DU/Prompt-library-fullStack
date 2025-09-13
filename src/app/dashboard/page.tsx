@@ -10,10 +10,16 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (status === "authenticated" && session?.user?.id) {
+    if (status === "authenticated") {
       const fetchPrompts = async () => {
         try {
-          const res = await fetch(`/api/dashboard?userId=${session.user.id}`);
+          // 👇 Always build absolute URL (important in Next.js App Router)
+          const baseUrl =
+            process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+
+          const res = await fetch(`${baseUrl}/api/dashboard`, {
+            cache: "no-store",
+          });
           const data = await res.json();
           setPrompts(data.prompts || []);
         } catch (error) {
@@ -26,10 +32,11 @@ export default function Dashboard() {
     } else {
       setLoading(false);
     }
-  }, [status, session?.user?.id]);
+  }, [status]);
 
   if (loading) return <p className="container mx-auto p-4">Loading...</p>;
-  if (status !== "authenticated") return <p className="container mx-auto p-4">Please sign in</p>;
+  if (status !== "authenticated")
+    return <p className="container mx-auto p-4">Please sign in</p>;
 
   return (
     <div className="container mx-auto p-4">
@@ -46,3 +53,4 @@ export default function Dashboard() {
     </div>
   );
 }
+  
