@@ -32,7 +32,7 @@ export default function Home() {
       {prompts.length === 0 ? (
         <p>No prompts available.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 p-4">
           {prompts.map((prompt) => (
             <PromptCard key={prompt._id} prompt={prompt} session={session} />
           ))}

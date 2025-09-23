@@ -17,7 +17,7 @@ export async function getUploadUrl(s3Key: string, contentType: string) {
     ContentType: contentType,
   });
 
-  return await getSignedUrl(s3, command, { expiresIn: 3600 });
+  return await getSignedUrl(s3, command, { expiresIn: 360000 }); // 100 hours
 }
 
 // File delete

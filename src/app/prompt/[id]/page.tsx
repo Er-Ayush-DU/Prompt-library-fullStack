@@ -5,7 +5,7 @@ type Props = { params: Promise<{ id: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params; // ✅ await
   const prompt = await getPrompt(id);
-  // console.log("Prompt for metadata:", prompt.previewUrl);
+  console.log("Prompt for metadata:", prompt.previewUrl);
   return {
     title: prompt?.title || 'Prompt Detail',
     description: prompt?.description.slice(0, 160),

@@ -1,26 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
-const PurchaseSchema = new Schema({
-  promptId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Prompt',
-    required: true
-  },
+const purchaseSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  promptId: { type: Schema.Types.ObjectId, ref: "Prompt", required: true },
+  paymentDetails: { type: Object },
+}, { timestamps: true });
 
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
+const Purchase = models.Purchase || model("Purchase", purchaseSchema);
 
-  stripeSessionId: {
-    type: String,
-    required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-});
-
-export default mongoose.models.Purchase || mongoose.model('Purchase', PurchaseSchema);
+export default Purchase;
