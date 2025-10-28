@@ -1,6 +1,5 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt";
-import { Session } from "next-auth";
+import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { dbConnect } from "@/lib/db";
 import User from "@/models/userModel/user";

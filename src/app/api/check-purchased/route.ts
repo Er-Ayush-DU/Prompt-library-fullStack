@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+// app/api/check-purchased/route.ts
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
 import Purchase from "@/models/purchaseModel/purchase";
@@ -11,24 +11,13 @@ export async function GET(req: Request) {
 
     if (!promptId || !userId) {
       return NextResponse.json({ purchased: false });
-
-
-
     }
 
     await dbConnect();
-
-    const purchased = await Purchase.findOne({
-      userId: new mongoose.Types.ObjectId(userId),
-      promptId: new mongoose.Types.ObjectId(promptId),
-    });
-    // console.log(typeof userId, typeof promptId)
-    console.log("All purchases for this user:", await Purchase.find({ userId }));
-    console.log("promptId:", promptId, "userId:", userId, "purchased:", purchased);
+    const purchased = await Purchase.findOne({ userId, promptId });
 
     return NextResponse.json({ purchased: !!purchased });
   } catch (err: any) {
-    console.error("Check purchase error:", err);
     return NextResponse.json({ purchased: false, error: err.message }, { status: 500 });
   }
 }
