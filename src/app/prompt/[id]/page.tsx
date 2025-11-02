@@ -38,5 +38,6 @@ export default async function PromptDetail({ params }: Props) {
       <p>Likes: {prompt.likesCount} | Comments: {prompt.commentsCount}</p>
       {/* Add likes/comments UI in Day 3 */}
     </div>
+    // <div></div>
   );
 }
