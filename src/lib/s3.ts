@@ -1,5 +1,8 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 
 export const s3 = new S3Client({
   region: process.env.AWS_REGION!,
@@ -9,23 +12,32 @@ export const s3 = new S3Client({
   },
 });
 
-// File upload URL
-export async function getUploadUrl(s3Key: string, contentType: string) {
-  const command = new PutObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET_NAME!,
-    Key: s3Key,
-    ContentType: contentType,
-  });
+// Upload file + return PUBLIC URL
+export async function uploadFile(file: File): Promise<string> {
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
 
-  return await getSignedUrl(s3, command, { expiresIn: 360000 }); // 100 hours
+  const key = `uploads/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME!,
+      Key: key,
+      Body: buffer,
+      ContentType: file.type,
+      ACL: "public-read", // YE ZAROORI HAI
+    })
+  );
+
+  // PUBLIC URL (no expiry)
+  return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
 }
 
-// File delete
+// Delete file
 export async function deleteFromS3(s3Key: string) {
   const command = new DeleteObjectCommand({
     Bucket: process.env.AWS_S3_BUCKET_NAME!,
     Key: s3Key,
   });
-
   return await s3.send(command);
 }

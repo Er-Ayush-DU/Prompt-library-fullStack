@@ -46,7 +46,7 @@ export default function Navbar() {
       <div className="flex items-center gap-4 relative" ref={catRef}>
         <Link href="/" className="flex items-center gap-2 text-lg font-bold">
           <img src="/assets/logo.jpeg" alt="Logo" className="w-7 h-7" />
-          PromptBase
+          PromptLibrary
         </Link>
 
         {/* Categories Button */}

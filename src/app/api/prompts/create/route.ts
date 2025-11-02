@@ -3,6 +3,9 @@ import { dbConnect } from "@/lib/db";
 import Prompt from "@/models/promptModel/prompt";
 import { getUserFromCookies } from "@/lib/auth";
 
+// IMAGE EXTENSION CHECK
+const imageRegex = /\.(png|jpe?g|webp|gif|svg)$/i;
+
 export async function POST(req: Request) {
   try {
     await dbConnect();
@@ -24,10 +27,22 @@ export async function POST(req: Request) {
       modifiedAfterGeneration
     } = await req.json();
 
+
+    // REQUIRED FIELDS
     if (!title || !description || !category || !s3Key || !previewUrl) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    // IMAGE VALIDATION (previewUrl must end with image extension)
+    if (!imageRegex.test(previewUrl)) {
+      return NextResponse.json(
+        { error: "previewUrl must be a valid image (png, jpg, webp, gif, svg)" },
+        { status: 400 }
+      );
+    }
+
+
+    // CREATE PROMPT
     const prompt = await Prompt.create({
       title,
       description,
