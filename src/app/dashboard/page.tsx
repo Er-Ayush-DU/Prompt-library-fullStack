@@ -53,7 +53,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main>
         <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">My Creations</h2>
 
         {prompts.length === 0 ? (
@@ -64,11 +64,11 @@ export default function Dashboard() {
         ) : (
           <Masonry
             breakpointCols={breakpointColumns}
-            className="flex -ml-4 w-auto"
-            columnClassName="pl-4 bg-clip-padding"
+            className="flex w-auto"
+            columnClassName="bg-clip-padding"
           >
             {prompts.map((prompt) => (
-              <div key={prompt._id} className="mb-4">
+              <div key={prompt._id}>
                 <PromptCard prompt={prompt} session={session} />
               </div>
             ))}
