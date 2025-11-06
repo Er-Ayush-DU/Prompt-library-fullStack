@@ -82,7 +82,7 @@ export const authOption: NextAuthOptions = {
 export async function getUserFromCookies() {
   const session = await getServerSession(authOption);
   if (!session?.user) return null;
-
+  
   return {
     id: session.user.id,
     name: session.user.name,
