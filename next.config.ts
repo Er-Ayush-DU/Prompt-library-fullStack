@@ -5,19 +5,20 @@ const nextConfig: NextConfig = {
 
   // IMAGE CONFIGURATION
   images: {
+    unoptimized: true,
     // FOR EXTERNAL IMAGES (S3, Unsplash, etc.)
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'prompt-library-ayush.s3.eu-north-1.amazonaws.com',
         port: '',
-        pathname: '/**',
+        pathname: '/uploads/**',
       },
       {
         protocol: 'https',
         hostname: 'prompt-library-ayush.s3.amazonaws.com',
         port: '',
-        pathname: '/**',
+        pathname: '/uploads/**',
       },
       {
         protocol: 'https',

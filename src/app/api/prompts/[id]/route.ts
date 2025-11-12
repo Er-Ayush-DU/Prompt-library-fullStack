@@ -2,20 +2,34 @@
   import { dbConnect } from "@/lib/db";
   import Prompt from "@/models/promptModel/prompt";
 
-  export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    try {
-      await dbConnect();
-      const { id } = await params; // ✅ await
-      const prompt = await Prompt.findById(id).lean();
 
-      if (!prompt) {
-        return NextResponse.json({ error: "Prompt not found" }, { status: 404 });
-      }
+  // export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  //   try {
+  //     await dbConnect();
+  //     const { id } = await params; // ✅ await
+  //     const prompt = await Prompt.findById(id).lean();
 
-      return NextResponse.json(prompt, { status: 200 });
-    } catch (error) {
-      console.error("Prompt detail API error:", error);
-      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-    }
-  }
-  // Other methods (PUT, DELETE) can be added here as needed
+  //     if (!prompt) {
+  //       return NextResponse.json({ error: "Prompt not found" }, { status: 404 });
+  //     }
+
+  //     return NextResponse.json(prompt, { status: 200 });
+  //   } catch (error) {
+  //     console.error("Prompt detail API error:", error);
+  //     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  //   }
+  // }
+  // Other methods (PUT, DELETE) can be added here as needed     
+  
+  
+  // app/api/prompts/[id]/route.ts
+
+  export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  const prompt = await Prompt.findById(params.id).populate("createdBy", "username");
+  if (!prompt) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  return NextResponse.json({
+    ...prompt.toObject(),
+    createdBy: prompt.createdBy?._id.toString(), // STRING BHEJO
+  });
+}

@@ -10,12 +10,12 @@ import { useRouter } from "next/navigation";
 interface Prompt {
   _id: string;
   title: string;
-  description: string;
+  prompt: string;
   previewUrl: string;
   category: string;
 }
 
-export default function SearchBar() {
+export default function   SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Prompt[]>([]);
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div ref={searchRef} className="relative flex-1 max-w-xl mx-6">
+    <div ref={searchRef} className="relative flex-1 max-w-xl mx-6 rounded-l-full">
       <form onSubmit={handleSubmit} className="relative">
         <input
           type="text"
@@ -77,7 +77,7 @@ export default function SearchBar() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => results.length > 0 && setShowResults(true)}
           placeholder="Search prompts..."
-          className="w-full rounded-l-full px-5 py-2.5 bg-[#2a2940] text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+          className="w-full rounded-l-full rounded-r-full px-5 py-2.5 bg-[#2a2940] text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
         />
         {query && (
           <button
@@ -130,7 +130,7 @@ export default function SearchBar() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-medium truncate">{prompt.title}</h3>
-                    <p className="text-xs text-gray-400 truncate">{prompt.description}</p>
+                    <p className="text-xs text-gray-400 truncate">{prompt.prompt}</p>
                   </div>
                   <span className="text-xs bg-pink-500/20 text-pink-300 px-2 py-1 rounded-full">
                     {prompt.category}

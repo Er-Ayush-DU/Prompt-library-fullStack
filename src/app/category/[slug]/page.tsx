@@ -84,7 +84,7 @@ export default async function CategoryPage({
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {prompts.map((prompt: any) => (
-              <PromptCard key={prompt._id} prompt={prompt} session={session} />
+              <PromptCard key={prompt._id} prompt={prompt}/>
             ))}
           </div>
         )}

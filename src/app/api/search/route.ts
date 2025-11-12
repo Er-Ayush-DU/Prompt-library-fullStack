@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const prompts = await Prompt.find({
       $or: [
         { title: { $regex: q, $options: "i" } },
-        { description: { $regex: q, $options: "i" } },
+        { z: { $regex: q, $options: "i" } },
         { tags: { $in: [new RegExp(q, "i")] } },
       ],
     })

@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       Bucket: process.env.AWS_S3_BUCKET_NAME!,
       Key: s3Key,
       ContentType: contentType,
+      // ACL: "public-read",
     });
 
     const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
