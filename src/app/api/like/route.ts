@@ -1,17 +1,26 @@
-import { NextRequest, NextResponse } from "next/server";
-import { dbConnect } from "@/lib/db";
+// app/api/like/route.ts
+import { NextRequest } from "next/server";
+import Like from "@/models/likeModel/likes";
 import Prompt from "@/models/promptModel/prompt";
 
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
-    const { promptId, userId } = await req.json();
+    const { promptId, userId, action } = await req.json();
+
+    if (action === "like") {
+      const existing = await Like.findOne({ promptId, userId });
+      if (existing) return Response.json({ message: "Already liked" }, { status: 400 });
+
+      await Like.create({ promptId, userId });
+      await Prompt.findByIdAndUpdate(promptId, { $inc: { likesCount: 1 } });
+    } else if (action === "unlike") {
+      await Like.deleteOne({ promptId, userId });
+      await Prompt.findByIdAndUpdate(promptId, { $inc: { likesCount: -1 } });
+    }
+
     const prompt = await Prompt.findById(promptId);
-    if (prompt) prompt.likesCount += 1;
-    await prompt?.save();
-    return NextResponse.json({ message: "Liked" }, { status: 200 });
-  } catch (error) {
-    console.error("Like API error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return Response.json({ likesCount: prompt.likesCount });
+  } catch (error: any) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
 }

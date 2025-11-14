@@ -1,5 +1,5 @@
 // app/api/create-order/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import Razorpay from "razorpay";
 
 const razorpay = new Razorpay({
@@ -9,12 +9,10 @@ const razorpay = new Razorpay({
 
 export async function POST(req: NextRequest) {
   const { promptId, amount } = await req.json();
-
   const order = await razorpay.orders.create({
-    amount: amount * 100,
+    amount,
     currency: "INR",
-    receipt: `prompt_${promptId}_${Date.now()}`,
+    receipt: promptId,
   });
-
-  return NextResponse.json({ orderId: order.id });
+  return Response.json(order);
 }

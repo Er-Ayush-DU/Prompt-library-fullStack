@@ -24,8 +24,10 @@
   
   // app/api/prompts/[id]/route.ts
 
-  export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const prompt = await Prompt.findById(params.id).populate("createdBy", "username");
+  export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
+  const prompt = await Prompt.findById(id).populate("createdBy", "username");
   if (!prompt) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json({

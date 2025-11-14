@@ -94,10 +94,10 @@ export default function Navbar() {
               className="w-9 h-9 rounded-full border-2 border-pink-400 cursor-pointer hover:border-pink-300 transition"
               onClick={() => setMenuOpen(!menuOpen)}
             />
-            {menuOpen && (
+            {menuOpen && (  
               <div className="absolute right-0 mt-2 w-48 bg-[#2a2940] rounded-lg shadow-xl border border-gray-700 z-50">
                 <Link href="/profile" className="block px-4 py-2 hover:bg-pink-500 rounded-t-lg transition" onClick={() => setMenuOpen(false)}>Profile</Link>
-                <Link href="/settings" className="block px-4 py-2 hover:bg-pink-500 transition" onClick={() => setMenuOpen(false)}>Settings</Link>
+                {/* <Link href="/settings" className="block px-4 py-2 hover:bg-pink-500 transition" onClick={() => setMenuOpen(false)}>Settings</Link> */}
                 <Link href="/dashboard" className="block px-4 py-2 hover:bg-pink-500 transition" onClick={() => setMenuOpen(false)}>Dashboard</Link>
                 <Link href="/" className="block px-4 py-2 hover:bg-pink-500 transition" onClick={() => setMenuOpen(false)}>Home</Link>
                 <button

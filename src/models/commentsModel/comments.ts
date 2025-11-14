@@ -8,16 +8,16 @@ const CommentSchema = new Schema(
       required: true,
       index: true
     },
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true
     },
-    userName: {
-      type: String,
-      required: true
-    },
-    comment: {
+    // userName: {
+    //   type: String,
+    //   required: true
+    // },
+    text: {
       type: String,
       required: true,
       trim: true,
