@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   // IMAGE CONFIGURATION
   images: {
     unoptimized: true,
-    // FOR EXTERNAL IMAGES (S3, Unsplash, etc.)
+
     remotePatterns: [
       {
         protocol: 'https',
@@ -34,23 +34,19 @@ const nextConfig: NextConfig = {
       },
     ],
 
-    // FOR LOCAL IMAGES (public folder)
     domains: ['localhost'],
-
-    // OPTIONAL: Improve image loading
     formats: ['image/webp', 'image/avif'],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // OPTIONAL: Performance & SEO
   poweredByHeader: false,
   compress: true,
-  swcMinify: true,
 
-  // OPTIONAL: Environment Variables
+  // ENVIRONMENT VARIABLES
   env: {
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    NEXT_PUBLIC_APP_URL:
+      process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   },
 };
 
