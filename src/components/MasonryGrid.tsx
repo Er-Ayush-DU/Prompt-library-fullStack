@@ -25,7 +25,7 @@ export default function MasonryGrid({ prompts, session }: MasonryGridProps) {
     >
       {prompts.map((prompt) => (
         <div key={prompt._id}>
-          <PromptCard prompt={prompt} session={session} />
+          <PromptCard prompt={prompt} />
         </div>
       ))}
     </Masonry>

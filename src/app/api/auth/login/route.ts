@@ -7,7 +7,7 @@ import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, action, newPassword, token } = await req.json();
+    const { email, password, action} = await req.json();
 
     await dbConnect();
 

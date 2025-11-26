@@ -2,8 +2,9 @@
   "extends": ["next", "next/core-web-vitals"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",   // Ignore unused vars
     "@next/next/no-img-element": "off",
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "no-console": "off"                             // Ignore console warnings
   }
 }

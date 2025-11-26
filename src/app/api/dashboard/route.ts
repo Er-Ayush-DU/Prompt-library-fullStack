@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
 import Prompt from "@/models/promptModel/prompt";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/lib/auth";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     await dbConnect();
 

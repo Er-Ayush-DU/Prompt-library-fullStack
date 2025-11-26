@@ -69,7 +69,7 @@ export default function Dashboard() {
           >
             {prompts.map((prompt) => (
               <div key={prompt._id}>
-                <PromptCard prompt={prompt} session={session} />
+                <PromptCard prompt={prompt} />
               </div>
             ))}
           </Masonry>

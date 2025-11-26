@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     try {
       promptObjectId = new mongoose.Types.ObjectId(promptId);
       userObjectId = new mongoose.Types.ObjectId(userId);
-    } catch (err) {
+    } catch (e) {
       return Response.json({ error: "Invalid ID format" }, { status: 400 });
     }
 
