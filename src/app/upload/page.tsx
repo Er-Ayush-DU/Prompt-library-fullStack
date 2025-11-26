@@ -108,7 +108,7 @@ function UploadContent() {
   if (status !== "authenticated") return <AuthPrompt />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-pink-900 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-pink-900 py-24 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">

@@ -1,18 +1,17 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface IPrompt extends Document {   
+export interface IPrompt extends Document {
   title: string;
   description: string;
   category:
   | "image"
   | "video_noaudio"
-  | "video_audio"
   | "audio"
+  | "clips"
+  | "games"
   | "webapp"
-  | "mobileapp"
-  | "webgame"
   | "ui_design"
-  | "text";
+  | "other";
   contentType: string; // e.g. image/png, video/mp4
   tags: string[];
   price: number;

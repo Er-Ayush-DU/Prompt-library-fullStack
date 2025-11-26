@@ -20,7 +20,7 @@ export default function MasonryGrid({ prompts, session }: MasonryGridProps) {
   return (
     <Masonry
       breakpointCols={breakpointColumns}
-      className="flex w-auto -ml-4"
+      className="flex w-auto"
       columnClassName="bg-clip-padding"
     >
       {prompts.map((prompt) => (

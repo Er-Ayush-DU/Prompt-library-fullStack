@@ -72,8 +72,8 @@ export default async function CategoryPage({
       </section>
 
       {/* PROMPTS GRID */}
-      <main className="container mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
+      <main className="container mx-auto py-16">
+        <h2 className="text-4xl font-bold text-center text-gray-500 mb-12">
           Explore {categoryName} AI Art
         </h2>
 
@@ -82,7 +82,8 @@ export default async function CategoryPage({
             No {categoryName.toLowerCase()} prompts yet.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {prompts.map((prompt: any) => (
               <PromptCard key={prompt._id} prompt={prompt}/>
             ))}

@@ -47,6 +47,7 @@
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* HERO SECTION */}
         <section className="relative h-screen w-full overflow-hidden">
+              
           <Image
             src="/assets/hero_image.jpg"
             alt="AI Art Hero"
@@ -79,7 +80,7 @@
           ) : (
             <Masonry
               breakpointCols={breakpointColumns}
-              className="flex w-auto -ml-4"
+              className="flex w-auto"
               columnClassName="bg-clip-padding"
             >
               {prompts.map((prompt) => (

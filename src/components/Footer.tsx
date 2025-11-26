@@ -76,7 +76,7 @@ export default function Footer() {
         <div className="border-t border-purple-800/50 mt-12 pt-8 text-center text-sm text-gray-400">
           <p>&copy; 2025 PromptHub. All rights reserved.</p>
           <p className="mt-2">
-            Made with ❤️ for AI creators worldwide
+            Made by Ayush Tiwari <span className="text-pink-500">♥</span>
           </p>
         </div>
       </div>

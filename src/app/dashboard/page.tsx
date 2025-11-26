@@ -43,7 +43,7 @@ export default function Dashboard() {
   if (status !== "authenticated") return <p className="text-center py-20">Please sign in</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50" >
       <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">My Dashboard</h1>
@@ -54,7 +54,7 @@ export default function Dashboard() {
       </header>
 
       <main>
-        <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">My Creations</h2>
+        <h2 className="text-4xl font-bold text-gray-500 mb-8 text-center my-5 ">My Creations</h2>
 
         {prompts.length === 0 ? (
           <div className="text-center py-20">
