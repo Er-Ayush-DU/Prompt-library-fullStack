@@ -4,6 +4,8 @@ import mongoose, { Schema, model, models } from "mongoose";
 const purchaseSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   promptId: { type: Schema.Types.ObjectId, ref: "Prompt", required: true },
+  paymentId: String,
+  orderId: String,    
   paymentDetails: { type: Object },
   purchasedAt: { type: Date, default: Date.now }
 }, { timestamps: true });

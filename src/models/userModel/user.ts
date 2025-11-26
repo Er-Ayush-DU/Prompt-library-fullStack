@@ -9,6 +9,7 @@ export interface IUser extends Document {
   resetTokenExpiry?: number;
   avatarUrl?: string;
   bio?: string;
+  isAdmin: boolean;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -18,8 +19,11 @@ const UserSchema = new Schema<IUser>({
   resetToken: { type: String },
   resetTokenExpiry: { type: Number },
   avatarUrl: { type: String },
-  bio: { type: String, maxlength: 200 }
+  bio: { type: String, maxlength: 200 },
+  isAdmin: { type: Boolean, default: false }
 }, { timestamps: true });
+
+
 
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {

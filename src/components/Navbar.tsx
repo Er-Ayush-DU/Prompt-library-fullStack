@@ -39,7 +39,7 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold">
           <img src="/assets/logo.jpeg" alt="Logo" className="w-7 h-7 rounded-full" />
-          PromptLibrary
+          PromptHub
         </Link>
         <CategoryMenu />
       </div>
@@ -64,7 +64,7 @@ export default function Navbar() {
       {/* Right: Links + Icons */}
       <nav className="flex items-center gap-10 relative">
         {/* <Link href="/jobs" className="hover:text-pink-400 transition">Jobs</Link> */}
-        <button onClick={handleSell} className="hover:text-pink-400 w-auto h-auto transition cursor-pointer bg-[#171719] text-gray-500 rounded-full px-4 py-2">Create prompt</button>
+        <button onClick={handleSell} className="hover:text-pink-400 w-auto h-auto transition cursor-pointer bg-[#171719] text-white rounded-full px-4 py-2">Create & upload</button>
 
 
         {/* Bell Icon */}

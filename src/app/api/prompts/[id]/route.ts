@@ -1,37 +1,39 @@
-  import { NextRequest, NextResponse } from "next/server";
-  import { dbConnect } from "@/lib/db";
-  import Prompt from "@/models/promptModel/prompt";
+// app/api/prompts/[id]/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { dbConnect } from "@/lib/db";
+import Prompt from "@/models/promptModel/prompt";
 
+// YE SABSE ZAROORI HAI — HAR REQUEST PE DB CONNECT KARO
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await dbConnect(); // YE LINE DAALNA ZAROORI HAI!!!
 
-  // export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  //   try {
-  //     await dbConnect();
-  //     const { id } = await params; // ✅ await
-  //     const prompt = await Prompt.findById(id).lean();
+    const { id } = await params;
 
-  //     if (!prompt) {
-  //       return NextResponse.json({ error: "Prompt not found" }, { status: 404 });
-  //     }
+    // ID valid hai?
+    if (!id || id.length !== 24) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    }
 
-  //     return NextResponse.json(prompt, { status: 200 });
-  //   } catch (error) {
-  //     console.error("Prompt detail API error:", error);
-  //     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  //   }
-  // }
-  // Other methods (PUT, DELETE) can be added here as needed     
-  
-  
-  // app/api/prompts/[id]/route.ts
+    const prompt = await Prompt.findById(id)
+      .populate("createdBy", "name image username")
+      .lean(); // .lean() → fast + plain object
 
-  export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+    if (!prompt) {
+      return NextResponse.json({ error: "Prompt not found" }, { status: 404 });
+    }
 
-  const prompt = await Prompt.findById(id).populate("createdBy", "username");
-  if (!prompt) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    // YE LINE SABSE ZAROORI HAI → { prompt } return karo!!!
+    return NextResponse.json({ prompt }, { status: 200 });
 
-  return NextResponse.json({
-    ...prompt.toObject(),
-    createdBy: prompt.createdBy?._id.toString(), // STRING BHEJO
-  });
+  } catch (error: any) {
+    console.error("GET /api/prompts/[id] error:", error.message);
+    return NextResponse.json(
+      { error: "Server error", details: error.message },
+      { status: 500 }
+    );
+  }
 }

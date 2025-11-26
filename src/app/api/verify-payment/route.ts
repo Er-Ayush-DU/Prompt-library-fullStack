@@ -4,7 +4,7 @@ import crypto from "crypto";
 import Purchase from "@/models/purchaseModel/purchase";
 
 export async function POST(req: NextRequest) {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, promptId, userId } = await req.json();
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, promptId, userId , amount } = await req.json();
 
   const body = razorpay_order_id + "|" + razorpay_payment_id;
   const expected = crypto
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     .digest("hex");
 
   if (expected === razorpay_signature) {
-    await Purchase.create({ userId, promptId, paymentId: razorpay_payment_id });
+    await Purchase.create({ userId, promptId, paymentId: razorpay_payment_id, orderId: razorpay_order_id, amount,});
     return NextResponse.json({ success: true });
   }
 

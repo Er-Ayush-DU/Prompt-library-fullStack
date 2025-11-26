@@ -11,13 +11,14 @@ import { Edit2, LogOut, Heart, ShoppingBag, Upload, User, Grid, Loader2 } from "
 type Tab = "my-prompts" | "purchased" | "liked";
 
 export default function ProfilePage() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession(); // ← update added for session refresh
   const [activeTab, setActiveTab] = useState<Tab>("my-prompts");
   const [prompts, setPrompts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [uploadLoading, setUploadLoading] = useState(false); // ← New loading for upload
 
   // Load user data
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function ProfilePage() {
         endpoint = `/api/my-purchases?userId=${session?.user?.id}`;
         break;
       case "liked":
-        endpoint = `/api/likes?userId=${session?.user?.id}`;
+        endpoint = `/api/like?userId=${session?.user?.id}`;
         break;
     }
 
@@ -63,6 +64,7 @@ export default function ProfilePage() {
     formData.append("name", name);
     if (avatarFile) formData.append("avatar", avatarFile);
 
+    setUploadLoading(true);
     try {
       const res = await fetch("/api/update-profile", {
         method: "POST",
@@ -70,12 +72,24 @@ export default function ProfilePage() {
       });
 
       if (res.ok) {
+        const updatedData = await res.json();
         alert("Profile updated!");
         setEditing(false);
-        window.location.reload(); // Refresh session
+
+        // Update session with new data (no full refresh needed)
+        await update({ avatarUrl: updatedData.avatarUrl || session.user.image, name });
+
+        // Optional: full reload for safety
+        window.location.reload();
+      } else {
+        const error = await res.json();
+        alert("Update failed: " + error.error);
       }
     } catch (err) {
+      console.error("Update error:", err);
       alert("Update failed");
+    } finally {
+      setUploadLoading(false);
     }
   };
 
@@ -149,10 +163,17 @@ export default function ProfilePage() {
             <div className="flex gap-3">
               <button
                 onClick={() => editing ? handleUpdateProfile() : setEditing(true)}
-                className="bg-purple-600 hover:bg-purple-700 px-5 py-2 rounded-full font-bold flex items-center gap-2"
+                disabled={uploadLoading}
+                className="bg-purple-600 hover:bg-purple-700 px-5 py-2 rounded-full font-bold flex items-center gap-2 disabled:opacity-50"
               >
-                <Edit2 className="w-4 h-4" />
-                {editing ? "Save" : "Edit"}
+                {uploadLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <Edit2 className="w-4 h-4" />
+                    {editing ? "Save" : "Edit"}
+                  </>
+                )}
               </button>
               <button
                 onClick={() => signOut()}
@@ -194,11 +215,10 @@ export default function ProfilePage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-2 rounded-full font-bold transition-all ${
-                activeTab === tab
+              className={`px-6 py-2 rounded-full font-bold transition-all ${activeTab === tab
                   ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
                   : "text-purple-300 hover:text-white"
-              }`}
+                }`}
             >
               {tab === "my-prompts" && "My Prompts"}
               {tab === "purchased" && "Purchased"}

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       key_secret: process.env.RAZORPAY_KEY_SECRET!,
     });
 
-    const options = {
+    const options = {                                                                                 
       amount: amount * 100, // paise
       currency: currency || "INR",
       receipt: `receipt_${Date.now()}`,
