@@ -59,30 +59,43 @@ Live Demo → (Add your Vercel link here after deploy)
 
 <div align="center">
 
-### Home Page
+### 🏠 Home Page – Beautiful Hero + Prompt Grid
+Beautiful hero section with trending prompts in a responsive masonry grid  
+Fully mobile-friendly • Dark gradient theme • Instant search ready
 
 ![Home Page1](./public/screenshots/hero.png)
 ![Home Page2](./public/screenshots/home.png)
 
-### Login 
+### 🔐 Login Page - Clean & Minimal
+Clean, minimal login with Google OAuth & email/password  
+Dark mode • Fast loading • Secure authentication
 
 ![Login](./public/screenshots/login.png)
 
 
-### Profile
+### 👤 Profile Dashboard – My Prompts, Purchased, Liked
+Personalized view with My Prompts, Purchased & Liked tabs  
+Avatar upload • Name edit • Stats panel
 
 ![Profile2](./public/screenshots/profile1.png)
 ![Profile2](./public/screenshots/profile2.png)
 
-### Prompt Detail 
+### 🎨 Prompt Detail Page – Full View + Buy Button
+Full prompt view with title, description, tags, price & creator info  
+Like, comment & real-time interaction • Buy button for paid prompts
+
 ![Prompt Detail](./public/screenshots/prompt-detail.png)
 
 
-### Payment 
+### 💸 Razorpay Payment Gateway – Real Payment Flow 
+Seamless & secure payment with real Indian Rupee support  
+Test + Live mode • Instant confirmation
 
 ![Payment Success](./public/screenshots/payment-success.png)
 
-### Prompt Detail after Payment
+### ⬇️ Instant Download After Purchase
+After successful payment → direct high-quality image download  
+No waiting • No extra steps
 
 ![Prompt details after payment 1](./public/screenshots/prompt_detail_after_pay1.png)
 ![Prompt details after payment 2](./public/screenshots/prompt_detail_after_pay2.png)
