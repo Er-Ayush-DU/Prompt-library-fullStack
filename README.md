@@ -29,7 +29,7 @@ Live Demo → (Add your Vercel link here after deploy)
 
 | Category              | Technology                              |
 |-----------------------|-----------------------------------------|
-| Framework             | Next.js 14 (App Router + Server Components) |
+| Framework             | Next.js 15 (App Router + Server Components) |
 | Language              | TypeScript                              |
 | Styling               | Tailwind CSS                            |
 | Authentication        | NextAuth.js                             |
