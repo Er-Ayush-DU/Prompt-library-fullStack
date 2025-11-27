@@ -1,169 +1,104 @@
-built a prompt Library
+# Prompt Library – AI Prompt Marketplace & Community Platform
+
+![Next.js](https://img.shields.io/badge/Next.js%2014-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Razorpay](https://img.shields.io/badge/Razorpay-0A254E?style=for-the-badge&logo=razorpay&logoColor=white)
+
+**A modern full-stack AI prompt marketplace where creators sell their prompts and users buy proven, high-quality AI prompts instantly.**
+
+Live Demo → (Add your Vercel link here after deploy)
+
+---
+
+## 🚀 Features
+
+- **User Authentication** – Login/Signup with Email + Google OAuth
+- **Profile Dashboard** – View My Prompts, Purchased Prompts, Liked Prompts
+- **Upload & Sell Prompts** – Set price, add preview image, tags, category
+- **Razorpay Payment Gateway** – Buy premium prompts securely
+- **Like & Comment System** – One like per user, real-time comments
+- **Instant Download** – After purchase, download image immediately
+- **Fully Responsive** – Works perfectly on mobile & desktop
+- **SEO Optimized** – Built with Next.js 14 App Router
+
+---
+
+## 🛠 Tech Stack
+
+| Category              | Technology                              |
+|-----------------------|-----------------------------------------|
+| Framework             | Next.js 14 (App Router + Server Components) |
+| Language              | TypeScript                              |
+| Styling               | Tailwind CSS                            |
+| Authentication        | NextAuth.js                             |
+| Database              | MongoDB + Mongoose                      |
+| File Storage          | Amazon S3                               |
+| Payment Gateway       | Razorpay                                |
+| Deployment            | Vercel                                  |
+
+---
+
+## 🔥 Key Modules
+
+1. **Authentication System**  
+2. **User Profile & Dashboard**  
+3. **Prompt Marketplace (Masonry Grid)**  
+4. **Prompt Creation & Monetization**  
+5. **Secure Payment Integration (Razorpay)**  
+6. **Like & Comment System**  
+7. **Purchase History & Download**  
+8. **Responsive & SEO-Friendly UI**
+
+---
+
+## 📸 Screenshots
 
 
-## Getting Started
 
-First, run the development server:
+<div align="center">
+
+### Home Page
+
+![Home Page1](./public/screenshots/hero.png)
+![Home Page2](./public/screenshots/home.png)
+
+### Login 
+
+![Login](./public/screenshots/login.png)
+
+
+### Profile
+
+![Profile2](./public/screenshots/profile1.png)
+![Profile2](./public/screenshots/profile2.png)
+
+### Prompt Detail 
+![Prompt Detail](./public/screenshots/prompt-detail.png)
+
+
+### Payment 
+
+![Payment Success](./public/screenshots/payment-success.png)
+
+### Prompt Detail after Payment
+
+![Prompt details after payment 1](./public/screenshots/prompt_detail_after_pay1.png)
+![Prompt details after payment 2](./public/screenshots/prompt_detail_after_pay2.png)
+
+
+</div>
+
+
+---
+
+## 🚀 Quick Start (Run Locally)
 
 ```bash
+git clone https://github.com/yourusername/prompt-library.git
+cd prompt-library
+npm install
+cp .env.example .env.local
+# Add your keys in .env.local
 npm run dev
-```
-
-
-
-
-# api/login
-
-``` typecript
-// "use client";
-
-// import { useState } from "react";
-// import { useRouter } from "next/navigation";
-
-// export default function LoginPage() {
-//   const router = useRouter();
-//   const [form, setForm] = useState({ email: "", password: "" });
-//   const [error, setError] = useState("");
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     setError("");
-//     try {
-//       const res = await fetch("/api/auth/login", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(form)
-//       });
-//       const data = await res.json();
-//       if (!res.ok) throw new Error(data.error || "Login failed");
-//       router.push("/"); // Home page
-//     } catch (err: any) {
-//       setError(err.message);
-//     }
-//   };
-
-//   return (
-//     <div className="flex justify-center items-center min-h-screen bg-gray-900">
-//       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-full max-w-md">
-//         <h1 className="text-2xl font-bold text-white mb-4">Login</h1>
-//         {error && <p className="text-red-500 mb-2">{error}</p>}
-
-//         <input
-//           name="email"
-//           type="email"
-//           placeholder="Email"
-//           value={form.email}
-//           onChange={handleChange}
-//           className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-//           required
-//         />
-//         <input
-//           name="password"
-//           type="password"
-//           placeholder="Password"
-//           value={form.password}
-//           onChange={handleChange}
-//           className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-//           required
-//         />
-//         <button
-//           type="submit"
-//           className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
-//         >
-//           Login
-//         </button>
-//       </form>
-//     </div>
-//   );// "use client";
-
-// import { useState } from "react";
-// import { useRouter } from "next/navigation";
-
-// export default function SignupPage() {
-//   const router = useRouter();
-//   const [form, setForm] = useState({ name: "", email: "", password: "", bio: "" });
-//   const [error, setError] = useState("");
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     setError("");
-//     try {
-//       const res = await fetch("/api/auth/signup", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(form)
-//       });
-//       const data = await res.json();
-//       if (!res.ok) throw new Error(data.error || "Signup failed");
-//       router.push("/login");
-//     } catch (err: any) {
-//       setError(err.message);
-//     }
-//   };
-
-//   return (
-//     <div className="flex justify-center items-center min-h-screen bg-gray-900">
-//       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-full max-w-md">
-//         <h1 className="text-2xl font-bold text-white mb-4">Sign Up</h1>
-//         {error && <p className="text-red-500 mb-2">{error}</p>}
-
-//         <input
-//           name="name"
-//           type="text"
-//           placeholder="Name"
-//           value={form.name}
-//           onChange={handleChange}
-//           className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-//           required
-//         />
-//         <input
-//           name="email"
-//           type="email"
-//           placeholder="Email"
-//           value={form.email}
-//           onChange={handleChange}
-//           className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-//           required
-//         />
-//         <input
-//           name="password"
-//           type="password"
-//           placeholder="Password"
-//           value={form.password}
-//           onChange={handleChange}
-//           className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-//           required
-//         />
-//         <textarea
-//           name="bio"
-//           placeholder="Short Bio"
-//           value={form.bio}
-//           onChange={handleChange}
-//           className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-//         />
-//         <button
-//           type="submit"
-//           className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
-//         >
-//           Sign Up
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// }
-
-
-```
-
-# api/signup
-
