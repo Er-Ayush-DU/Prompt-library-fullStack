@@ -165,7 +165,7 @@ export default function PromptCard({ prompt }: PromptCardProps) {
   };
 
   return (
-    <Link href={`/prompt/${prompt._id}`} className="group block">
+    <Link href={`/prompts/${prompt._id}`} className="group block">
       <div className="group relative bg-white shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer">
 
         {/* Media (Image or Video) */}
